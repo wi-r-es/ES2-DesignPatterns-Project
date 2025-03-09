@@ -107,7 +107,7 @@ public class ConfigurationManager {
         }
         
         try (FileOutputStream fos = new FileOutputStream(configFilePath)) {
-            Properties props = new Properties();
+            Properties props = new Properties(); //https://www.geeksforgeeks.org/java-util-properties-class-java/
             
             // Convert configurations to properties with type hints
             for (Map.Entry<String, Object> entry : configurations.entrySet()) {
