@@ -8,8 +8,8 @@ public class Main {
     
     public static void main(String[] args) {
         ConfigurationManager configManager = ConfigurationManager.getInstance();
-        int maxLength = configManager.getConfiguration("maxPasswordLength");
-        String storageType = configManager.getConfiguration("defaultStorageType");
+        int maxLength = (int) configManager.getConfiguration("maxPasswordLength");
+        String storageType = (String) configManager.getConfiguration("defaultStorageType");
 
         System.out.println("Configuration Manager Settings. MaxLength:" + maxLength + " StorageType: " + storageType  );
 

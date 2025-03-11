@@ -42,14 +42,14 @@ public class ConfigurationManager {
         Using T -> Generic types for ease of use with whichever class we want to use 
     */
     @SuppressWarnings("unchecked")
-    public <T> T getConfiguration(String key) {
-        return (T) configurations.get(key); 
+    public Object getConfiguration(String key) {
+        return configurations.get(key);
     }
     
     /*  Setter for configuration
         
     */
-    public <T> void setConfiguration(String key, T value) {
+    public void setConfiguration(String key, Object value) {
         configurations.put(key, value);
     }
     
