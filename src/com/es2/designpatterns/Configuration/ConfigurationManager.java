@@ -19,9 +19,6 @@ public class ConfigurationManager {
     
     // Configuration storage
     private Map<String, Object> configurations;
-
-
-    private String defaultConfigPath = "config.csv";
     
     // Private constructor to prevent instantiation from outside
     private ConfigurationManager() {
