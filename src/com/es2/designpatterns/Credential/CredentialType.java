@@ -4,5 +4,6 @@ public enum CredentialType {
     PASSWORD,
     API_KEY,
     SECRET_KEY,
-    CREDIT_CARD
+    CREDIT_CARD,
+    PIN
 }

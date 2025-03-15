@@ -34,7 +34,11 @@ public class ConfigurationManager {
         }
         return instance;
     }
-    
+
+    public void showMessage() {
+        System.out.println("Singleton instance: " + this);
+    }
+
     /* Getter for configuration -- https://www.geeksforgeeks.org/generics-in-java/
         Using T -> Generic types for ease of use with whichever class we want to use 
     */

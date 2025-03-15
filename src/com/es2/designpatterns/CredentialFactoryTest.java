@@ -73,12 +73,7 @@ public class CredentialFactoryTest {
         });
         
         // Create a PIN with our new algorithm
-        SecurityCriteria pinCriteria = new SecurityCriteria.Builder()
-                .length(6)
-                .algorithm("pin")
-                .build();
-        
-        Credential pinCredential = factory.createCredential(CredentialType.PASSWORD, pinCriteria);
-        System.out.println("PIN: " + pinCredential.getValue());
+        Credential pin = factory.createCredential(CredentialType.PIN, null);
+        System.out.println("PIN: " + pin.getValue());
     }
 }

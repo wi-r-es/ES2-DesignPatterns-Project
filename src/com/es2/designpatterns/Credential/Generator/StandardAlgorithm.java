@@ -11,9 +11,8 @@ public class StandardAlgorithm implements GenerationAlgorithm {
         StringBuilder password = new StringBuilder();
         String uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
-        String numberChars = "0123456789";
-        String symbolChars = "!@#$%^&*()_+-=[]{}|;:,.<>?";
-        
+
+
         StringBuilder validChars = new StringBuilder();
         
         if (criteria.isIncludeUppercase()) {
@@ -22,14 +21,6 @@ public class StandardAlgorithm implements GenerationAlgorithm {
         
         if (criteria.isIncludeLowercase()) {
             validChars.append(lowercaseChars);
-        }
-        
-        if (criteria.isIncludeNumbers()) {
-            validChars.append(numberChars);
-        }
-        
-        if (criteria.isIncludeSymbols()) {
-            validChars.append(symbolChars);
         }
         
         // Remove excluded characters

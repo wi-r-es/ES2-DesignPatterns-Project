@@ -24,7 +24,11 @@ public class CredentialFactory {
         }
         return instance;
     }
-    
+
+    public void showMessage() {
+        System.out.println("Singleton instance: " + this);
+    }
+
     public Credential createCredential(CredentialType type, SecurityCriteria criteria) {
         String id = UUID.randomUUID().toString();
         
@@ -61,6 +65,17 @@ public class CredentialFactory {
                 Credential ccCredential = new Credential(id, "Credit Card", "");
                 ccCredential.setMetadata("type", "cc");
                 return ccCredential;
+
+            case PIN:
+                SecurityCriteria pinCriteria = new SecurityCriteria.Builder()
+                    .length(4)
+                    .includeSymbols(false)
+                    .algorithm("pin")
+                    .build();
+                String pin = passwordGenerator.generatePassword(pinCriteria);
+                Credential pinCredential = new Credential(id, "PIN", pin);
+                pinCredential.setMetadata("type", "pin");
+                return pinCredential;
                 
             default:
                 throw new IllegalArgumentException("Unsupported credential type: " + type);
