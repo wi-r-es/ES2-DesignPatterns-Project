@@ -1,4 +1,14 @@
+package src.com.es2.designpatterns;
+
 import src.com.es2.designpatterns.Configuration.ConfigurationManager;
+import src.com.es2.designpatterns.Credential.Credential;
+import src.com.es2.designpatterns.Credential.CredentialFactory;
+import src.com.es2.designpatterns.Credential.CredentialType;
+import src.com.es2.designpatterns.Credential.Generator.GenerationAlgorithm;
+import src.com.es2.designpatterns.Credential.SecurityCriteria;
+
+import java.security.SecureRandom;
+import java.util.Random;
 
 
 public class CredentialFactoryTest {

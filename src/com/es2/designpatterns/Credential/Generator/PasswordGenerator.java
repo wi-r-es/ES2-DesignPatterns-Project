@@ -1,6 +1,11 @@
 package src.com.es2.designpatterns.Credential.Generator;
 
 
+import src.com.es2.designpatterns.Credential.SecurityCriteria;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class PasswordGenerator {
     private Map<String, GenerationAlgorithm> algorithms;
     

@@ -1,6 +1,10 @@
 package src.com.es2.designpatterns.Credential;
 
+import java.util.Date;
+import java.util.HashMap;
+
 public class Credential {
+    private final HashMap<Object, Object> metadata;
     private String id;
     private String name;
     private String value;

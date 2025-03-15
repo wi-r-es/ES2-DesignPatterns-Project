@@ -1,5 +1,10 @@
 package src.com.es2.designpatterns.Credential.Generator;
 
+import src.com.es2.designpatterns.Credential.SecurityCriteria;
+
+import java.security.SecureRandom;
+import java.util.Random;
+
 public class StandardAlgorithm implements GenerationAlgorithm {
     @Override
     public String generate(SecurityCriteria criteria) {
