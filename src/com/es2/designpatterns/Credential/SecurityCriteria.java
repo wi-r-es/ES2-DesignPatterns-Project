@@ -1,5 +1,7 @@
 package src.com.es2.designpatterns.Credential;
 
+import src.com.es2.designpatterns.Configuration.ConfigurationManager;
+
 /**
  *  Implements Builder pattern to ease up construction of the security criteria for password creation to be used for the factory pattern
  *
@@ -14,21 +16,23 @@ public class SecurityCriteria {
     private boolean includeSymbols;
     private String excludedChars;
     private String algorithm;
-    
+
+
 
     public static class Builder { //https://refactoring.guru/design-patterns/builder/java/example
         private SecurityCriteria criteria;
         
         public Builder() {
+            ConfigurationManager config = ConfigurationManager.getInstance();
             criteria = new SecurityCriteria();
             // Set defaults
-            criteria.length = 16;
+            criteria.length = config.getConfiguration("maxPasswordLength");
             criteria.includeUppercase = true;
             criteria.includeLowercase = true;
             criteria.includeNumbers = true;
             criteria.includeSymbols = true;
             criteria.excludedChars = "";
-            criteria.algorithm = "standard";
+            criteria.algorithm = "standard" ;
         }
         
         public Builder length(int length) {

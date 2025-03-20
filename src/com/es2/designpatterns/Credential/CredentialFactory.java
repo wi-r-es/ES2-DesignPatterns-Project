@@ -40,7 +40,6 @@ public class CredentialFactory {
             case API_KEY:
                 // API keys might have different requirements
                 SecurityCriteria apiCriteria = new SecurityCriteria.Builder()
-                    .length(32)
                     .includeSymbols(false)
                     .algorithm("standard")
                     .build();
@@ -52,7 +51,6 @@ public class CredentialFactory {
             case SECRET_KEY:
                 // Secret keys might be longer and more complex
                 SecurityCriteria secretCriteria = new SecurityCriteria.Builder()
-                    .length(64)
                     .algorithm("enhanced")
                     .build();
                 String secretKey = passwordGenerator.generatePassword(secretCriteria);
@@ -81,7 +79,7 @@ public class CredentialFactory {
                 throw new IllegalArgumentException("Unsupported credential type: " + type);
         }
     }
-    
+
     // Method to register custom algorithms
     public void registerAlgorithm(String name, GenerationAlgorithm algorithm) {
         passwordGenerator.registerAlgorithm(name, algorithm);

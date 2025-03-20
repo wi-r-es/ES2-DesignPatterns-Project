@@ -47,6 +47,7 @@ public class Credential {
     public String toString() {
         return "Credential{" +
                 "id='" + id + '\'' +
+                ", pass=" + value + '\'' +
                 ", name='" + name + '\'' +
                 ", timestamp=" + timestamp +
                 '}';
