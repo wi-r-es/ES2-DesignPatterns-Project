@@ -9,18 +9,19 @@ import java.util.UUID;
 public class CredentialFactory {
     // The single instance
     private static CredentialFactory instance;
-    
     private PasswordGenerator passwordGenerator;
-    
+    private CredentialStorage storage;
+
     // Private constructor
-    private CredentialFactory() {
+    private CredentialFactory(StorageFactory storageFactory) {
         this.passwordGenerator = new PasswordGenerator();
+        this.storage = storageFactory.createStorage();
     }
-    
+
     // Global access point
-    public static synchronized CredentialFactory getInstance() {
+    public static synchronized CredentialFactory getInstance(StorageFactory storageFactory) {
         if (instance == null) {
-            instance = new CredentialFactory();
+            instance = new CredentialFactory(storageFactory);
         }
         return instance;
     }
@@ -31,35 +32,34 @@ public class CredentialFactory {
 
     public Credential createCredential(CredentialType type, SecurityCriteria criteria) {
         String id = UUID.randomUUID().toString();
-        
+        Credential credential;
+
         switch (type) {
             case PASSWORD:
                 String password = passwordGenerator.generatePassword(criteria);
-                return new Credential(id, "Password", password);
-                
+                return credential = new Credential(id, "Password", password);
+
             case API_KEY:
                 // API keys might have different requirements
                 SecurityCriteria apiCriteria = new SecurityCriteria.Builder()
-                    .length(32)
-                    .includeSymbols(false)
-                    .algorithm("standard")
-                    .build();
+                        .includeSymbols(false)
+                        .algorithm("standard")
+                        .build();
                 String apiKey = passwordGenerator.generatePassword(apiCriteria);
                 Credential apiCredential = new Credential(id, "API Key", apiKey);
                 apiCredential.setMetadata("type", "api");
                 return apiCredential;
-                
+
             case SECRET_KEY:
                 // Secret keys might be longer and more complex
                 SecurityCriteria secretCriteria = new SecurityCriteria.Builder()
-                    .length(64)
-                    .algorithm("enhanced")
-                    .build();
+                        .algorithm("enhanced")
+                        .build();
                 String secretKey = passwordGenerator.generatePassword(secretCriteria);
                 Credential secretCredential = new Credential(id, "Secret Key", secretKey);
                 secretCredential.setMetadata("type", "secret");
                 return secretCredential;
-                
+
             case CREDIT_CARD:
                 // Credit card credentials would store card details
                 Credential ccCredential = new Credential(id, "Credit Card", "");
@@ -68,20 +68,20 @@ public class CredentialFactory {
 
             case PIN:
                 SecurityCriteria pinCriteria = new SecurityCriteria.Builder()
-                    .length(4)
-                    .includeSymbols(false)
-                    .algorithm("pin")
-                    .build();
+                        .length(4)
+                        .includeSymbols(false)
+                        .algorithm("pin")
+                        .build();
                 String pin = passwordGenerator.generatePassword(pinCriteria);
                 Credential pinCredential = new Credential(id, "PIN", pin);
                 pinCredential.setMetadata("type", "pin");
                 return pinCredential;
-                
+
             default:
                 throw new IllegalArgumentException("Unsupported credential type: " + type);
         }
     }
-    
+
     // Method to register custom algorithms
     public void registerAlgorithm(String name, GenerationAlgorithm algorithm) {
         passwordGenerator.registerAlgorithm(name, algorithm);

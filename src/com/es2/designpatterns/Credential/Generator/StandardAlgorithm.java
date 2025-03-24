@@ -14,15 +14,15 @@ public class StandardAlgorithm implements GenerationAlgorithm {
 
 
         StringBuilder validChars = new StringBuilder();
-        
+
         if (criteria.isIncludeUppercase()) {
             validChars.append(uppercaseChars);
         }
-        
+
         if (criteria.isIncludeLowercase()) {
             validChars.append(lowercaseChars);
         }
-        
+
         // Remove excluded characters
         String excluded = criteria.getExcludedChars();
         for (int i = 0; i < excluded.length(); i++) {
@@ -32,18 +32,18 @@ public class StandardAlgorithm implements GenerationAlgorithm {
                 validChars.deleteCharAt(index);
             }
         }
-        
+
         if (validChars.length() == 0) {
             throw new IllegalArgumentException("No valid characters available for password generation");
         }
-        
+
         // Generate the password
         Random random = new SecureRandom();
         for (int i = 0; i < criteria.getLength(); i++) {
             int randomIndex = random.nextInt(validChars.length());
             password.append(validChars.charAt(randomIndex));
         }
-        
+
         return password.toString();
     }
 }
