@@ -10,18 +10,16 @@ public class CredentialFactory {
     // The single instance
     private static CredentialFactory instance;
     private PasswordGenerator passwordGenerator;
-    private CredentialStorage storage;
 
     // Private constructor
-    private CredentialFactory(StorageFactory storageFactory) {
-        this.passwordGenerator = new PasswordGenerator();
-        this.storage = storageFactory.createStorage();
+    private CredentialFactory(PasswordGenerator passwordGenerator) {
+        this.passwordGenerator = passwordGenerator;
     }
 
     // Global access point
-    public static synchronized CredentialFactory getInstance(StorageFactory storageFactory) {
+    public static synchronized CredentialFactory getInstance(PasswordGenerator passwordGenerator) {
         if (instance == null) {
-            instance = new CredentialFactory(storageFactory);
+            instance = new CredentialFactory(passwordGenerator);
         }
         return instance;
     }
@@ -32,36 +30,25 @@ public class CredentialFactory {
 
     public Credential createCredential(CredentialType type, SecurityCriteria criteria) {
         String id = UUID.randomUUID().toString();
-        Credential credential;
 
         switch (type) {
             case PASSWORD:
-                String password = passwordGenerator.generatePassword(criteria);
-                return credential = new Credential(id, "Password", password);
+                return new Credential(id, "Password", passwordGenerator.generatePassword(criteria));
 
             case API_KEY:
-                // API keys might have different requirements
                 SecurityCriteria apiCriteria = new SecurityCriteria.Builder()
                         .includeSymbols(false)
                         .algorithm("standard")
                         .build();
-                String apiKey = passwordGenerator.generatePassword(apiCriteria);
-                Credential apiCredential = new Credential(id, "API Key", apiKey);
-                apiCredential.setMetadata("type", "api");
-                return apiCredential;
+                return new Credential(id, "API Key", passwordGenerator.generatePassword(apiCriteria));
 
             case SECRET_KEY:
-                // Secret keys might be longer and more complex
                 SecurityCriteria secretCriteria = new SecurityCriteria.Builder()
                         .algorithm("enhanced")
                         .build();
-                String secretKey = passwordGenerator.generatePassword(secretCriteria);
-                Credential secretCredential = new Credential(id, "Secret Key", secretKey);
-                secretCredential.setMetadata("type", "secret");
-                return secretCredential;
+                return new Credential(id, "Secret Key", passwordGenerator.generatePassword(secretCriteria));
 
             case CREDIT_CARD:
-                // Credit card credentials would store card details
                 Credential ccCredential = new Credential(id, "Credit Card", "");
                 ccCredential.setMetadata("type", "cc");
                 return ccCredential;
@@ -72,10 +59,7 @@ public class CredentialFactory {
                         .includeSymbols(false)
                         .algorithm("pin")
                         .build();
-                String pin = passwordGenerator.generatePassword(pinCriteria);
-                Credential pinCredential = new Credential(id, "PIN", pin);
-                pinCredential.setMetadata("type", "pin");
-                return pinCredential;
+                return new Credential(id, "PIN", passwordGenerator.generatePassword(pinCriteria));
 
             default:
                 throw new IllegalArgumentException("Unsupported credential type: " + type);

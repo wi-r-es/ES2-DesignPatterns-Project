@@ -1,8 +1,5 @@
 package src.com.es2.designpatterns.Configuration;
 
-import src.com.es2.designpatterns.Credential.CredentialType;
-import src.com.es2.designpatterns.Credential.SecurityCriteria;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

@@ -5,15 +5,22 @@ import java.util.Map;
 import src.com.es2.designpatterns.Configuration.ConfigurationManager;
 import src.com.es2.designpatterns.Credential.*;
 import src.com.es2.designpatterns.Credential.Generator.PasswordGenerator;
+import src.com.es2.designpatterns.Storage.Storage;
+import src.com.es2.designpatterns.Storage.StorageFactory;
+import src.com.es2.designpatterns.Storage.StorageType;
 
 public class Main {
 
     public static void main(String[] args) {
-        StorageFactory storageFactory = new FileStorageFactory(); // alterar para DatabaseStorageFactory() ou CloudStorageFactory()
-        ConfigurationManager configManager = ConfigurationManager.getInstance();
-        CredentialFactory instance = CredentialFactory.getInstance(storageFactory);
+        PasswordGenerator passwordGenerator = new PasswordGenerator();
+        CredentialFactory instance = CredentialFactory.getInstance(passwordGenerator);
 
+        ConfigurationManager configManager = ConfigurationManager.getInstance();
         configManager.loadConfigurations("config.properties");
+
+        System.out.println("Configuration Manager Settings:");
+        displayCurrentConfigurations(configManager);
+
         int maxLength = configManager.getConfiguration("maxPasswordLength");
         String storageType = configManager.getConfiguration("defaultStorageType");
 
@@ -24,36 +31,48 @@ public class Main {
         configManager.setConfiguration("newSetting", "This is a new setting");
         configManager.setConfiguration("debugMode", true);
 
-        // System.out.println("Configuration Manager Settings. MaxLength:" + configManager.getConfiguration("maxPasswordLength") + " StorageType: " + configManager.getConfiguration("defaultStorageType")  );
-        displayCurrentConfigurations(configManager);
+        // Criar factory storage
+        StorageFactory storageFactory = new StorageFactory(configManager.getConfiguration("defaultStorageType"));
 
         System.out.println("\nSaving Configurations");
         configManager.saveConfigurations();
         System.out.println("\nLoading Configurations");
         configManager.loadConfigurations("config.properties");
 
-        Credential passwordStandard = instance.createCredential(CredentialType.PASSWORD, new SecurityCriteria.Builder().build()) ;
-        Credential passwordEnhanced = instance.createCredential(CredentialType.PASSWORD, new SecurityCriteria.Builder().algorithm("enhanced").build()) ;
-        Credential API = instance.createCredential(CredentialType.API_KEY, null);
-        Credential SecretKey = instance.createCredential(CredentialType.SECRET_KEY, null);
-        System.out.println("Generated password: " + passwordStandard);
-        System.out.println("Generated password: " + passwordEnhanced);
-        System.out.println("Generated API: " + API);
-        System.out.println("Generated SecretKey: " + SecretKey);
+        Credential passwordStandard = instance.createCredential(CredentialType.PASSWORD, new SecurityCriteria.Builder().build());
+        Credential passwordEnhanced = instance.createCredential(CredentialType.PASSWORD, new SecurityCriteria.Builder().algorithm("enhanced").build());
+        Credential apiKey = instance.createCredential(CredentialType.API_KEY, null);
+        Credential secretKey = instance.createCredential(CredentialType.SECRET_KEY, null);
 
-        // Testes FileStorageFactory
-        FileStorageFactory fileStorageFactory = new FileStorageFactory();
-        CredentialFactory fileInstance = CredentialFactory.getInstance(fileStorageFactory);
-        System.out.println("File Storage Factory");
-        Credential passwordStandardFile = fileInstance.createCredential(CredentialType.PASSWORD, new SecurityCriteria.Builder().build()) ;
-        Credential passwordEnhancedFile = fileInstance.createCredential(CredentialType.PASSWORD, new SecurityCriteria.Builder().algorithm("enhanced").build()) ;
-        Credential APIFile = fileInstance.createCredential(CredentialType.API_KEY, null);
-        Credential SecretKeyFile = fileInstance.createCredential(CredentialType.SECRET_KEY, null);
-        System.out.println("Generated password: " + passwordStandardFile);
-        System.out.println("Generated password: " + passwordEnhancedFile);
-        System.out.println("Generated API: " + APIFile);
-        System.out.println("Generated SecretKey: " + SecretKeyFile);
+        System.out.println("\nGenerated Credentials:");
+        System.out.println(passwordStandard);
+        System.out.println(passwordEnhanced);
+        System.out.println(apiKey);
+        System.out.println(secretKey);
 
+        storageFactory.createStorage(passwordEnhanced, null);
+        //storageFactory.createStorage(passwordStandard, StorageType.FILE.toString());
+        storageFactory.createStorage(passwordStandard, StorageType.DATABASE.toString());
+        //storageFactory.createStorage(secretKey, StorageType.CLOUD.toString());
+
+        String StandardpasswordId = passwordStandard.getId();
+        String EnhancedpasswordId = passwordEnhanced.getId();
+        String apiKeyId = apiKey.getId();
+        String secretKeyId = secretKey.getId();
+
+        // Recuperar e imprimir as credenciais armazenadas
+        System.out.println("\nCredenciais Armazenadas em CLOUD:");
+        // Cloud
+        storageFactory.printCredential(StorageType.CLOUD, EnhancedpasswordId);
+        storageFactory.printCredential(StorageType.CLOUD, StandardpasswordId);
+        // File
+        System.out.println("\nCredenciais Armazenadas em FILE:");
+        storageFactory.printCredential(StorageType.FILE, EnhancedpasswordId);
+        storageFactory.printCredential(StorageType.FILE, StandardpasswordId);
+        // DataBase
+        System.out.println("\nCredenciais Armazenadas em DATABASE:");
+        storageFactory.printCredential(StorageType.DATABASE, EnhancedpasswordId);
+        storageFactory.printCredential(StorageType.DATABASE, StandardpasswordId);
     }
 
 
