@@ -6,6 +6,8 @@ import java.util.Map;
 import src.com.es2.designpatterns.Configuration.ConfigurationManager;
 import src.com.es2.designpatterns.Credential.*;
 import src.com.es2.designpatterns.ResourcePool.ResourcePoolManager;
+import src.com.es2.designpatterns.StateStorage.IStateManager;
+import src.com.es2.designpatterns.StateStorage.StateManager;
 import src.com.es2.designpatterns.Storage.StorageFactory;
 import src.com.es2.designpatterns.Storage.StorageType;
 import src.com.es2.designpatterns.Storage.Implementors.FileStorageImplementor;
@@ -13,9 +15,6 @@ import src.com.es2.designpatterns.StructuredManagement.CategoryManager;
 import src.com.es2.designpatterns.StructuredManagement.PasswordCategory;
 import src.com.es2.designpatterns.StructuredManagement.PasswordEntry;
 import src.com.es2.designpatterns.StructuredManagement.PasswordItem;
-import src.com.es2.designpatterns.ResourcePool.EncryptionEngine;
-import src.com.es2.designpatterns.ResourcePool.ResourcePoolManager;
-import src.com.es2.designpatterns.ResourcePool.SecureConnection;
 
 public class Main {
 
@@ -215,6 +214,29 @@ public class Main {
             // Make sure to close all resources
             resmanager.closeAll();
         }
+
+
+
+
+        System.out.println("===== Testing State Storage Pattern =====\n");
+        
+        // Get the state manager
+        IStateManager stateManager = StateManager.getInstance();
+        
+        // Test basic state operations
+        StateStorageTest.testBasicStateOperations(stateManager);
+        StateStorageTest.testBasicStateOperations(stateManager);
+        
+        // Test state history and restoration
+        StateStorageTest.testStateHistoryAndRestoration(stateManager);
+        
+        // Test recent credentials tracking
+        StateStorageTest.testRecentCredentialsTracking();
+        
+        // Test persistent state
+        StateStorageTest.testPersistentState(stateManager);
+        
+
     
     }
 

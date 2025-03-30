@@ -22,6 +22,7 @@ public class ObjectPool<T> {
     private final Set<T> inUse;
     
     // Maximum number of objects the pool can contain
+    @SuppressWarnings("unused")
     private final int maxObjects;
     
     // Function to create new objects
