@@ -3,7 +3,6 @@ package src.com.es2.designpatterns;
 import src.com.es2.designpatterns.Credential.Credential;
 import src.com.es2.designpatterns.Credential.CredentialFactory;
 import src.com.es2.designpatterns.Credential.CredentialType;
-import src.com.es2.designpatterns.Credential.SecurityCriteria;
 import src.com.es2.designpatterns.StructuredManagement.CategoryManager;
 import src.com.es2.designpatterns.StructuredManagement.PasswordCategory;
 import src.com.es2.designpatterns.StructuredManagement.PasswordEntry;
@@ -76,6 +75,7 @@ public class CategoryMgmtTest {
         // Create another password entry directly in 'Pessoal'
         System.out.println("\nAdding a password directly to 'Pessoal'...");
         Credential emailCredential = credentialFactory.createCredential(CredentialType.PASSWORD);
+        @SuppressWarnings("unused")
         PasswordEntry emailEntry = manager.createPasswordEntry(
             pessoal.getId(), "Email Pessoal", emailCredential);
         manager.displayAll();

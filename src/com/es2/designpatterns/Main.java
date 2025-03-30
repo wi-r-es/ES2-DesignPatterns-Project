@@ -5,6 +5,7 @@ import java.util.Map;
 
 import src.com.es2.designpatterns.Configuration.ConfigurationManager;
 import src.com.es2.designpatterns.Credential.*;
+import src.com.es2.designpatterns.ResourcePool.ResourcePoolManager;
 import src.com.es2.designpatterns.Storage.StorageFactory;
 import src.com.es2.designpatterns.Storage.StorageType;
 import src.com.es2.designpatterns.Storage.Implementors.FileStorageImplementor;
@@ -12,6 +13,9 @@ import src.com.es2.designpatterns.StructuredManagement.CategoryManager;
 import src.com.es2.designpatterns.StructuredManagement.PasswordCategory;
 import src.com.es2.designpatterns.StructuredManagement.PasswordEntry;
 import src.com.es2.designpatterns.StructuredManagement.PasswordItem;
+import src.com.es2.designpatterns.ResourcePool.EncryptionEngine;
+import src.com.es2.designpatterns.ResourcePool.ResourcePoolManager;
+import src.com.es2.designpatterns.ResourcePool.SecureConnection;
 
 public class Main {
 
@@ -184,9 +188,33 @@ public class Main {
         // Create another password entry directly in 'Pessoal'
         System.out.println("\nAdding a password directly to 'Pessoal'...");
         Credential emailCredential = factory.createCredential(CredentialType.PASSWORD);
+        @SuppressWarnings("unused")
         PasswordEntry emailEntry = manager.createPasswordEntry(
             pessoal.getId(), "Email Pessoal", emailCredential);
         manager.displayAll();
+
+
+
+        System.out.println("===== Testing Resource Pool Pattern =====\n");
+        // Get the resource pool manager
+        ResourcePoolManager resmanager = ResourcePoolManager.getInstance();
+        
+        try { 
+            // Test secure connections
+            ResourcePoolTest.testSecureConnections(resmanager);
+            
+            // Test encryption engines
+            ResourcePoolTest.testEncryptionEngines(resmanager);
+            
+            // Test resource reuse
+            ResourcePoolTest.testResourceReuse(resmanager);
+        } catch (InterruptedException e) {
+            System.err.println("Test interrupted: " + e.getMessage());
+            Thread.currentThread().interrupt();
+        } finally {
+            // Make sure to close all resources
+            resmanager.closeAll();
+        }
     
     }
 
