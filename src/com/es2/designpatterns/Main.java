@@ -4,9 +4,9 @@ import java.util.Map;
 
 import src.com.es2.designpatterns.Configuration.ConfigurationManager;
 import src.com.es2.designpatterns.Credential.*;
-import src.com.es2.designpatterns.Credential.Generator.PasswordGenerator;
 import src.com.es2.designpatterns.Storage.StorageFactory;
 import src.com.es2.designpatterns.Storage.StorageType;
+import src.com.es2.designpatterns.Storage.Implementors.FileStorageImplementor;
 
 public class Main {
 
@@ -24,13 +24,13 @@ public class Main {
 
         System.out.println("Configuration Manager Settings. MaxLength:" + maxLength + " StorageType: " + storageType  );
 
-        configManager.setConfiguration("defaultStorageType", "CLOUD");
+        configManager.setConfiguration("defaultStorageType", StorageType.CLOUD);
         configManager.setConfiguration("maxPasswordLength", 64);
         configManager.setConfiguration("newSetting", "This is a new setting");
         configManager.setConfiguration("debugMode", true);
 
-        // Criar factory storage
-        StorageFactory storageFactory = new StorageFactory(configManager.getConfiguration("defaultStorageType"));
+        // Criar factory storage -  with a default storage type
+        StorageFactory storageFactory = StorageFactory.getInstance(configManager.getConfiguration("defaultStorageType"));
 
         System.out.println("\nSaving Configurations");
         configManager.saveConfigurations();
@@ -50,35 +50,72 @@ public class Main {
         System.out.println(apiKey);
         System.out.println(secretKey);
 
-        storageFactory.createStorage(passwordEnhanced, null);
-        storageFactory.createStorage(passwordStandard, StorageType.FILE.toString());
-        storageFactory.createStorage(passwordStandard, StorageType.DATABASE.toString());
-        storageFactory.createStorage(secretKey, StorageType.CLOUD.toString());
-
         String StandardpasswordId = passwordStandard.getId();
         String EnhancedpasswordId = passwordEnhanced.getId();
         String apiKeyId = apiKey.getId();
         String secretKeyId = secretKey.getId();
 
+        System.out.println("\n\n\n-----------------------------------");
+        storageFactory.saveCredential(passwordEnhanced);
+        storageFactory.saveCredential(passwordStandard);
+        System.out.println("\n########\n");
+        //prints
+        storageFactory.printCredential(StandardpasswordId);
+        storageFactory.printCredential(EnhancedpasswordId);
+        System.out.println("\n\n\n-----------------------------------");
+        
+        storageFactory.setDefaultStorage(StorageType.DATABASE);
+        storageFactory.saveCredential(passwordStandard);
+        storageFactory.saveCredential(secretKey);
+        System.out.println("\n########\n");
+        storageFactory.printCredential(StandardpasswordId);
+        storageFactory.printCredential(secretKeyId);
+
+        
+
         // Recuperar e imprimir as credenciais armazenadas
-        System.out.println("\nCredenciais Armazenadas em CLOUD:");
+        // System.out.println("\nCredenciais Armazenadas em CLOUD:");
+        
         // Cloud
-        storageFactory.printCredential(StorageType.CLOUD, EnhancedpasswordId);
-        storageFactory.printCredential(StorageType.CLOUD, StandardpasswordId);
-        storageFactory.printCredential(StorageType.CLOUD, apiKeyId);
-        storageFactory.printCredential(StorageType.CLOUD, secretKeyId);
+        
+        // storageFactory.printCredential(StorageType.CLOUD, StandardpasswordId);
+        // storageFactory.printCredential(StorageType.CLOUD, apiKeyId);
+        // storageFactory.printCredential(StorageType.CLOUD, secretKeyId);
         // File
-        System.out.println("\nCredenciais Armazenadas em FILE:");
-        storageFactory.printCredential(StorageType.FILE, EnhancedpasswordId);
-        storageFactory.printCredential(StorageType.FILE, StandardpasswordId);
-        storageFactory.printCredential(StorageType.FILE, apiKeyId);
-        storageFactory.printCredential(StorageType.FILE, secretKeyId);
+        // System.out.println("\nCredenciais Armazenadas em FILE:");
+        // storageFactory.printCredential(StorageType.FILE, EnhancedpasswordId);
+        // storageFactory.printCredential(StorageType.FILE, StandardpasswordId);
+        // storageFactory.printCredential(StorageType.FILE, apiKeyId);
+        // storageFactory.printCredential(StorageType.FILE, secretKeyId);
         // DataBase
-        System.out.println("\nCredenciais Armazenadas em DATABASE:");
+        // System.out.println("\nCredenciais Armazenadas em DATABASE:");
+        // storageFactory.printCredential(StorageType.DATABASE, EnhancedpasswordId);
+        // storageFactory.printCredential(StorageType.DATABASE, StandardpasswordId);
+        // storageFactory.printCredential(StorageType.DATABASE, apiKeyId);
+        // storageFactory.printCredential(StorageType.DATABASE, secretKeyId);
+
+        System.out.println("\nCredencial Armazenada em FILE:");
+        storageFactory.printCredential(StorageType.FILE, StandardpasswordId);
+        System.out.println("\nCredencial Armazenada em DATABASE:");
         storageFactory.printCredential(StorageType.DATABASE, EnhancedpasswordId);
-        storageFactory.printCredential(StorageType.DATABASE, StandardpasswordId);
-        storageFactory.printCredential(StorageType.DATABASE, apiKeyId);
-        storageFactory.printCredential(StorageType.DATABASE, secretKeyId);
+
+        // Create a custom implementor
+        FileStorageImplementor customFileImpl = new FileStorageImplementor();
+        
+        // Switch the implementor for DATABASE storage
+        storageFactory.switchImplementor(StorageType.FILE, customFileImpl);
+        
+        // Save another credential to the default storage (still DATABASE, but now with cloud implementor)
+        // Credential password3 = new Credential("3", "SocialMediaPassword", "Social456!");
+        System.out.println("\n\n\n-----------------------------------");
+        storageFactory.saveCredential(secretKey);
+        storageFactory.saveCredential(apiKey);
+        
+        // Print the credential - it should show it was stored in DATABASE
+        // but internally it used the file implementor
+        System.out.println("\nCredenciais... :");
+        storageFactory.printCredential(secretKeyId);
+        storageFactory.printCredential(apiKeyId);
     }
 
 

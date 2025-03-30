@@ -1,7 +1,6 @@
 package src.com.es2.designpatterns.Credential;
 
 
-import src.com.es2.designpatterns.Credential.Generator.GenerationAlgorithm;
 import src.com.es2.designpatterns.Credential.Generator.PasswordGenerator;
 
 import java.util.UUID;

@@ -1,31 +1,24 @@
-package src.com.es2.designpatterns.Storage.Types;
+package src.com.es2.designpatterns.Storage.Implementors;
 
 import src.com.es2.designpatterns.Credential.Credential;
-import src.com.es2.designpatterns.Storage.Storage;
-import src.com.es2.designpatterns.Storage.StorageType;
-
+import src.com.es2.designpatterns.Storage.StorageImplementor;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DatabaseStorage implements Storage, StorageAllocation {
+public class DatabaseStorageImplementor implements StorageImplementor {
     private Map<String, Credential> dbStorage = new HashMap<>();
-
+    
     @Override
-    public void saveCredential(Credential credential) {
+    public void storeCredential(Credential credential) {
         dbStorage.put(credential.getId(), credential);
-        System.out.println("Credential saved in Database Storage.");
+        System.out.println("Credential saved in Database Storage implementation.");
     }
-
+    
     @Override
     public Credential retrieveCredential(String id) {
         return dbStorage.get(id);
     }
-
-    @Override
-    public StorageType getStorageType() {
-        return StorageType.DATABASE;
-    }
-
+    
     @Override
     public void allocateStorage() {
         System.out.println("Allocating database storage resources.");
