@@ -14,6 +14,7 @@ public class PasswordGenerator {
         // Register default algorithms
         algorithms.put("standard", new StandardAlgorithm());
         algorithms.put("enhanced", new EnhancedAlgorithm());
+        algorithms.put("pin", new PinAlgorithm());
     }
 
     public String generatePassword(SecurityCriteria criteria) {

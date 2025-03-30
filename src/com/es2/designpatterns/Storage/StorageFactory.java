@@ -1,6 +1,5 @@
 package src.com.es2.designpatterns.Storage;
 
-import src.com.es2.designpatterns.Configuration.ConfigurationManager;
 import src.com.es2.designpatterns.Credential.Credential;
 import src.com.es2.designpatterns.Storage.Types.CloudStorage;
 import src.com.es2.designpatterns.Storage.Types.DatabaseStorage;

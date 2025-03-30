@@ -5,7 +5,6 @@ import java.util.Map;
 import src.com.es2.designpatterns.Configuration.ConfigurationManager;
 import src.com.es2.designpatterns.Credential.*;
 import src.com.es2.designpatterns.Credential.Generator.PasswordGenerator;
-import src.com.es2.designpatterns.Storage.Storage;
 import src.com.es2.designpatterns.Storage.StorageFactory;
 import src.com.es2.designpatterns.Storage.StorageType;
 
@@ -13,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         PasswordGenerator passwordGenerator = new PasswordGenerator();
-        CredentialFactory instance = CredentialFactory.getInstance(passwordGenerator);
+        CredentialFactory factory = CredentialFactory.getInstance(passwordGenerator);
 
         ConfigurationManager configManager = ConfigurationManager.getInstance();
         configManager.loadConfigurations("config.properties");
@@ -39,14 +38,16 @@ public class Main {
         System.out.println("\nLoading Configurations");
         configManager.loadConfigurations("config.properties");
 
-        Credential passwordStandard = instance.createCredential(CredentialType.PASSWORD, new SecurityCriteria.Builder().build());
-        Credential passwordEnhanced = instance.createCredential(CredentialType.PASSWORD, new SecurityCriteria.Builder().algorithm("enhanced").build());
-        Credential apiKey = instance.createCredential(CredentialType.API_KEY, null);
-        Credential secretKey = instance.createCredential(CredentialType.SECRET_KEY, null);
+        Credential passwordStandard = factory.createCredential(CredentialType.PASSWORD);
+        Credential passwordEnhanced = factory.createCredential(CredentialType.SECRET_KEY);
+        Credential pin = factory.createCredential(CredentialType.PIN);
+        Credential apiKey = factory.createCredential(CredentialType.API_KEY);
+        Credential secretKey = factory.createCredential(CredentialType.SECRET_KEY);
 
         System.out.println("\nGenerated Credentials:");
         System.out.println(passwordStandard);
         System.out.println(passwordEnhanced);
+        System.out.println(pin);
         System.out.println(apiKey);
         System.out.println(secretKey);
 
@@ -65,14 +66,20 @@ public class Main {
         // Cloud
         storageFactory.printCredential(StorageType.CLOUD, EnhancedpasswordId);
         storageFactory.printCredential(StorageType.CLOUD, StandardpasswordId);
+        storageFactory.printCredential(StorageType.CLOUD, apiKeyId);
+        storageFactory.printCredential(StorageType.CLOUD, secretKeyId);
         // File
         System.out.println("\nCredenciais Armazenadas em FILE:");
         storageFactory.printCredential(StorageType.FILE, EnhancedpasswordId);
         storageFactory.printCredential(StorageType.FILE, StandardpasswordId);
+        storageFactory.printCredential(StorageType.FILE, apiKeyId);
+        storageFactory.printCredential(StorageType.FILE, secretKeyId);
         // DataBase
         System.out.println("\nCredenciais Armazenadas em DATABASE:");
         storageFactory.printCredential(StorageType.DATABASE, EnhancedpasswordId);
         storageFactory.printCredential(StorageType.DATABASE, StandardpasswordId);
+        storageFactory.printCredential(StorageType.DATABASE, apiKeyId);
+        storageFactory.printCredential(StorageType.DATABASE, secretKeyId);
     }
 
 
