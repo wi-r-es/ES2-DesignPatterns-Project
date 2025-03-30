@@ -11,8 +11,7 @@ import src.com.es2.designpatterns.Storage.StorageType;
 public class Main {
 
     public static void main(String[] args) {
-        PasswordGenerator passwordGenerator = new PasswordGenerator();
-        CredentialFactory factory = CredentialFactory.getInstance(passwordGenerator);
+        CredentialFactory factory = CredentialFactory.getInstance();
 
         ConfigurationManager configManager = ConfigurationManager.getInstance();
         configManager.loadConfigurations("config.properties");
@@ -52,9 +51,9 @@ public class Main {
         System.out.println(secretKey);
 
         storageFactory.createStorage(passwordEnhanced, null);
-        //storageFactory.createStorage(passwordStandard, StorageType.FILE.toString());
+        storageFactory.createStorage(passwordStandard, StorageType.FILE.toString());
         storageFactory.createStorage(passwordStandard, StorageType.DATABASE.toString());
-        //storageFactory.createStorage(secretKey, StorageType.CLOUD.toString());
+        storageFactory.createStorage(secretKey, StorageType.CLOUD.toString());
 
         String StandardpasswordId = passwordStandard.getId();
         String EnhancedpasswordId = passwordEnhanced.getId();

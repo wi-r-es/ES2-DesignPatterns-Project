@@ -14,15 +14,14 @@ public class CredentialFactory {
     private SecurityCriteriaBuilderProvider builderProvider;
 
     // Private constructor
-    private CredentialFactory(PasswordGenerator passwordGenerator) {
-        this.passwordGenerator = passwordGenerator;
-        // Use a method/class that provides configured builders
+    private CredentialFactory() {
+        this.passwordGenerator = new PasswordGenerator();;
         this.builderProvider = new DefaultSecurityCriteriaBuilderProvider();
     }
     // Global access point
-    public static synchronized CredentialFactory getInstance(PasswordGenerator passwordGenerator) {
+    public static synchronized CredentialFactory getInstance() {
         if (instance == null) {
-            instance = new CredentialFactory(passwordGenerator);
+            instance = new CredentialFactory();
         }
         return instance;
     }
