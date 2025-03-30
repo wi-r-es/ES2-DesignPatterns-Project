@@ -35,7 +35,6 @@ public class RecentCredentialsTracker implements Serializable {
     /**
      * Private constructor for singleton pattern.
      */
-    @SuppressWarnings("unchecked")
     private RecentCredentialsTracker() {
         this(StateManager.getInstance());
     }
@@ -45,7 +44,6 @@ public class RecentCredentialsTracker implements Serializable {
      * 
      * @param stateManager The state manager to use
      */
-    @SuppressWarnings("unchecked")
     private RecentCredentialsTracker(IStateManager stateManager) {
         this.maxRecentCredentials = 20;
         this.stateManager = stateManager;
