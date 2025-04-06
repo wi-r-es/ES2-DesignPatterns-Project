@@ -5,6 +5,9 @@ import java.util.Map;
 
 import src.com.es2.designpatterns.Configuration.ConfigurationManager;
 import src.com.es2.designpatterns.Credential.*;
+import src.com.es2.designpatterns.FunctionalityExtender.BasicPasswordAccessHandler;
+import src.com.es2.designpatterns.FunctionalityExtender.LoggingExtension;
+import src.com.es2.designpatterns.FunctionalityExtender.PasswordAccessHandler;
 import src.com.es2.designpatterns.ResourcePool.ResourcePoolManager;
 import src.com.es2.designpatterns.StateStorage.IStateManager;
 import src.com.es2.designpatterns.StateStorage.StateManager;
@@ -215,7 +218,9 @@ public class Main {
             resmanager.closeAll();
         }
 
-
+        PasswordAccessHandler handler = new BasicPasswordAccessHandler();
+        handler = new LoggingExtension(handler);
+        handler.access(EnhancedpasswordId, storageFactory, StorageType.CLOUD);
 
 
         System.out.println("===== Testing State Storage Pattern =====\n");
