@@ -1,7 +1,7 @@
-# Trabalho pratico de Engenharia de Software 2
-
-Nº Mec:
-- 13632 - Simão Pinto
-- 18981 - Diogo Fonseca
-- 19104 - Alexandre Marques
-- 26900 - José Machado
+# Pratical work for Software Engineering II for the Bsc in Computer Sciences Engineering 
+Password Manager application using several different Design patterns.
+- Singleton
+- Factory Method
+- Composite
+- Bridge
+- Decorator
