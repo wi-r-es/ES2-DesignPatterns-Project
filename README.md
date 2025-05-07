@@ -5,3 +5,5 @@ Password Manager application using several different Design patterns.
 - Composite
 - Bridge
 - Decorator
+- Object Pool
+- Memento
